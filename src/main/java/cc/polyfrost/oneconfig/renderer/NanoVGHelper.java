@@ -47,7 +47,7 @@ public interface NanoVGHelper {
      * Sets up rendering, calls the consumer with the NanoVG context, and then cleans up.
      *
      * @param consumer The consumer to call.
-     * @see NanoVGHelper#setupAndDraw(boolean, LongConsumer)
+     * @see NanoVGHelper#setupAndDraw(int, boolean, LongConsumer)
      */
     void setupAndDraw(LongConsumer consumer);
 
@@ -56,8 +56,18 @@ public interface NanoVGHelper {
      *
      * @param mcScaling Whether to render with Minecraft's scaling.
      * @param consumer  The consumer to call.
+     * @see NanoVGHelper#setupAndDraw(int, boolean, LongConsumer)
      */
     void setupAndDraw(boolean mcScaling, LongConsumer consumer);
+
+    /**
+     * Sets up rendering, calls the consumer with the NanoVG context, and then cleans up.
+     *
+     * @param nvgFlags  The NanoVG flags.
+     * @param mcScaling Whether to render with Minecraft's scaling.
+     * @param consumer  The consumer to call.
+     */
+    void setupAndDraw(int nvgFlags, boolean mcScaling, LongConsumer consumer);
 
     /**
      * Draws a rectangle with the given parameters.
@@ -165,6 +175,31 @@ public interface NanoVGHelper {
     void drawCircle(long vg, float x, float y, float radius, int color);
 
     /**
+     * Draws a hollow circle with the given parameters.
+     *
+     * @param vg        The NanoVG context.
+     * @param x         The x position.
+     * @param y         The y position.
+     * @param radiusX   The x radius.
+     * @param radiusY   The y radius.
+     * @param color     The color.
+     */
+    void drawEllipse(long vg, float x, float y, float radiusX, float radiusY, int color);
+
+    /**
+     * Draws a hollow circle with the given parameters.
+     *
+     * @param vg        The NanoVG context.
+     * @param x         The x position.
+     * @param y         The y position.
+     * @param radiusX   The x radius.
+     * @param radiusY   The y radius.
+     * @param color     The color.
+     * @param thickness The thickness.
+     */
+    void drawHollowEllipse(long vg, float x, float y, float radiusX, float radiusY, int color, float thickness);
+
+    /**
      * Draws a String with the given parameters.
      *
      * @param vg    The NanoVG context.
@@ -177,6 +212,20 @@ public interface NanoVGHelper {
      * @see Font
      */
     void drawText(long vg, String text, float x, float y, int color, float size, Font font);
+
+    /**
+     * Draws a centered String with the given parameters.
+     *
+     * @param vg    The NanoVG context.
+     * @param text  The text.
+     * @param x     The x position.
+     * @param y     The y position.
+     * @param color The color.
+     * @param size  The size.
+     * @param font  The font.
+     * @see Font
+     */
+    void drawCenteredText(long vg, String text, float x, float y, int color, float size, Font font);
 
     /**
      * Draws a String wrapped at the given width, with the given parameters.
