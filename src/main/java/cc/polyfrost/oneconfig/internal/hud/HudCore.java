@@ -28,8 +28,10 @@ package cc.polyfrost.oneconfig.internal.hud;
 
 import cc.polyfrost.oneconfig.config.elements.BasicOption;
 import cc.polyfrost.oneconfig.events.event.HudRenderEvent;
+import cc.polyfrost.oneconfig.events.event.InitializationEvent;
 import cc.polyfrost.oneconfig.hud.Hud;
 import cc.polyfrost.oneconfig.libs.eventbus.Subscribe;
+import cc.polyfrost.oneconfig.platform.Platform;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -39,6 +41,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class HudCore {
     public static final ConcurrentHashMap<Map.Entry<Field, Object>, Hud> huds = new ConcurrentHashMap<>();
     public static final ArrayList<BasicOption> hudOptions = new ArrayList<>();
+    private static boolean isPatcher = false;
     public static boolean editing = false;
 
     @Subscribe
@@ -46,9 +49,17 @@ public class HudCore {
         if (editing) return;
         for (Hud hud : huds.values()) {
             if (!hud.isEnabled()) continue;
+            //#if FORGE==1 && MC<=11202
+            if (hud.isCachingIgnored()) continue;
+            //#endif
             hud.deltaTicks = event.deltaTicks;
             hud.drawAll(event.matrices, false);
         }
+    }
+
+    @Subscribe
+    public void onInit(InitializationEvent event) {
+        isPatcher = Platform.getLoaderPlatform().isModLoaded("patcher");
     }
 
     public static void reInitHuds() {
@@ -68,5 +79,9 @@ public class HudCore {
             } catch (IllegalAccessException ignored) {
             }
         }
+    }
+
+    public static boolean isPatcher() {
+        return isPatcher;
     }
 }

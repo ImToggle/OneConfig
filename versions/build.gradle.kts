@@ -19,7 +19,7 @@ plugins {
 }
 
 kotlin.jvmToolchain {
-    (this as JavaToolchainSpec).languageVersion.set(JavaLanguageVersion.of(8))
+    this.languageVersion.set(JavaLanguageVersion.of(8))
 }
 
 java {
@@ -375,10 +375,7 @@ publishing {
             groupId = "cc.polyfrost"
             artifactId = base.archivesName.get()
 
-            artifact(tasks["jar"])
-            artifact(tasks["remapJar"])
-            artifact(tasks["sourcesJar"])
-            artifact(tasks["javadocJar"])
+            from(components["java"])
         }
     }
 
